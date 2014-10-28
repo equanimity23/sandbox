@@ -7,11 +7,16 @@ var Square = function(nId) {
 	oDiv.setAttribute('class', 'square');
 	
 	function getRandomInt(nMin, nMax) {
-	  return Math.floor(Math.random() * (nMax - nMin)) + nMin;
+		console.log('RandomInt: ', Math.floor(Math.random() * (nMax - nMin)) + nMin);
+		return Math.floor(Math.random() * (nMax - nMin)) + nMin;
 	}
 
 	function getRandomHex() {
-		return getRandomInt(0, 256).toString(16);
+		var sRandomHex = getRandomInt(0, 256).toString(16);
+		if (sRandomHex.length == 1) {
+			sRandomHex = '0' + sRandomHex;
+		}
+		return sRandomHex;
 	}
 
 	function getRandomColor() {

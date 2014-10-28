@@ -1,5 +1,5 @@
 var aSquares = [];
-var nSquaresCount = 8;
+var nSquaresCount = 800;
 
 function create() {
 	var oSquare;
@@ -13,7 +13,14 @@ function create() {
 }
 
 function run() {
-	for (var n=0; n<nSquaresCount; n++) {
-		oSquare
+	for (var n=nSquaresCount-1; n>0; n--) {
+		var oSquareNext     = aSquares[n];
+		var oSquarePrevious = aSquares[n-1];
+		sOldColor = oSquarePrevious.getColor();
+		oSquareNext.setColor(sOldColor);
+		
 	}
+	aSquares[0].setRandomColor();
+
+	setTimeout('run()', 100);
 }

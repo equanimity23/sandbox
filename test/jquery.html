@@ -1,0 +1,27 @@
+<html>
+	<head>
+		<title></title>
+		<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<style>
+			.clickable {
+				cursor: pointer;
+			}
+			.clickable:hover {
+				text-decoration: underline;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="hren" class="clickable">Click me gently</div>
+		
+		
+		<script>
+			$(document).ready(function() {
+				$('#hren').click(function() {
+					console.log('click');
+				});
+				console.log('ready');
+			});
+		</script>
+	</body>
+</html>
