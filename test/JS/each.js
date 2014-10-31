@@ -63,6 +63,27 @@ function map(o, f) {
 	}
 	return m;
 }
+[1,2,3]
+
+function reduce(o, f) {
+	var n = 0,
+		m,
+		mResult;
+	if (isArray( o )) {
+		if (mResult == null) {
+			mResult = 0;
+		}
+		for (n=0; n<o.length; n++) {
+			m = o[n];
+			mResult = f(n, m, mResult);
+	} else {	
+		for (var s in o) {
+			m = o[s];
+			mResult = f(s, m, mResult, n);
+			n ++;
+	}
+	return mResult;
+}
 
 function display(sKey, mValue, nIndex) {
 	console.log('sKey:', sKey, ', mValue:', mValue, ', nIndex:', nIndex);
