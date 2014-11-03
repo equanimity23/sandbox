@@ -77,3 +77,11 @@ v.timer = function(nInt, f, n) {
 		}, nInt);
 	}
 }
+
+v.strSpan = function(s, nLen) {
+	var sResult = '';
+	for (var n=0; n<nLen; n++) {
+		sResult += s;
+	}
+	return sResult;
+}

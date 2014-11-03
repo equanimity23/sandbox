@@ -12,16 +12,31 @@ v.Btree = function() {
 	}
 	
 	this.search = function(mKey) {
-		
+		if (_oRoot == null) {
+			return null;
+		}
+		return _oRoot.search(mKey);
+	}
+	
+	this.sort = function(bAsc) {
+		bAsc = bAsc || true;
+		if (_oRoot != null) {
+			return _oRoot.sort(bAsc);
+		};
+		return [];
 	}
 	
 	this.display = function() {
 		if (_oRoot == null) {
 			console.log('Tree is empty :(');
 		} else {
-			console.log(_oRoot.display());
+			console.log(_oRoot.toString());
 		}
 	}
+	
+	this.set = function(mKey, mData) {}
+	
+	this.unset = function(mKey) {}
 }
 
 v.Btree.Node = function(mKey, mData) {
@@ -52,11 +67,66 @@ v.Btree.Node = function(mKey, mData) {
 	
 	//23[6[2[null,null],8[7,null] , [null, 56[null, 123[null, null]]]
 	
-	this.display = function() {
-		var s = oRoot + '[' + _oLeftChild , _oRightChild + ']';
+	this.toString = function(nIndent) {
+		nIndent        = nIndent || 0;
+		var nOldIndent = nIndent;
+		nIndent       += mKey.toString().length + 2;
+		
+		var sLeft      = '',
+			sRight     = '',
+			sIndent    = v.strSpan(' ', nIndent),
+			sOldIndent = v.strSpan(' ', nOldIndent);
+		
 		if (_oLeftChild == null) {
-			
+			sLeft = 'null';
+		} else {
+			sLeft = _oLeftChild.toString(nIndent);
 		}
-		return ;
+		
+		if (_oRightChild == null) {
+			sRight = 'null';
+		} else {
+			sRight = _oRightChild.toString(nIndent);
+		}
+		
+		return mKey + '[\n' + sIndent + sLeft + ',\n' + sIndent + sRight + '\n' + sOldIndent + ']';
+	}
+	
+	this.sort = function(bAsc) {
+		var a = [];
+		if (bAsc) {
+			if (_oLeftChild != null) {
+				a = a.concat(_oLeftChild.sort(bAsc));
+			}
+			a.push(mData);
+			if (_oRightChild != null) {
+				a = a.concat(_oRightChild.sort(bAsc));
+			}
+		} else {
+			if (_oRightChild != null) {
+				a = a.concat(_oRightChild.sort(bAsc));
+			}
+			a.push(mData);
+			if (_oLeftChild != null) {
+				a = a.concat(_oLeftChild.sort(bAsc));
+			}
+		}
+		return a;
+	}
+	
+	this.search = function(mSearchKey) {
+		var mSearchData = null;
+		if (mSearchKey < mKey) {
+			if (_oLeftChild != null) {
+				mSearchData = _oLeftChild.search(mSearchKey);
+			}
+		} else if (mSearchKey > mKey) {
+			if (_oRightChild != null) {
+				mSearchData = _oRightChild.search(mSearchKey);
+			}
+		} else {
+			mSearchData = mData;
+		}
+		return mSearchData;
 	}
 }

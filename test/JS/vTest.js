@@ -29,10 +29,23 @@
 // 	return 'haha';
 // });
 
-v.timer(1000, function(n) {
-	if (n < 10) {
-		console.log('Callback is called:', n);
-		return true;
-	}
-	return false;
-});
+// v.timer(1000, function(n) {
+// 	if (n < 10) {
+// 		console.log('Callback is called:', n);
+// 		return true;
+// 	}
+// 	return false;
+// });
+
+var oTree = new v.Btree();
+
+oTree.insert(23, 'twenty three');
+oTree.insert(6, 'six');
+oTree.insert(2, 'two');
+oTree.insert(8, 'eight');
+
+oTree.display();
+console.log(oTree.sort(true));
+console.log(oTree.sort());
+
+console.log(oTree.search(23));
