@@ -35,19 +35,17 @@ v.Btree = function() {
 		}
 	}
 	
-	this.set = function(mKey, mNewData) {
-		var oNode = this.search(mKey, true);
-		if (oNode != null) {
-			oNode.set(mNewData);
-			return true;
-		}
-		return false;
-	}
-	
 	this.unset = function(mKey) {
 		var oNode = this.search(mKey, true);
 		if (oNode != null) {
-			
+			console.log(oNode, oNode.toString());
+			oReplacementNode = oNode.findReplacement();
+			if (oReplacementNode == null) {
+				oNode.unset();
+			} else {
+				oNode.copy(oReplacementNode);
+				oReplacementNode.unset();
+			}
 			return true;
 		}
 		return false;
@@ -59,16 +57,63 @@ v.Btree.Node = function(mKey, mData) {
 	var _oParent     = null,
 		_oLeftChild  = null,
 		_oRightChild = null;
+		
+	this.findLargest = function() {
+		if (_oLeftChild == null) {
+			return this;
+		} else {
+			return _oLeftChild.findLargest();
+		}
+	}
+	
+	this.findSmallest = function() {
+		if (_oRightChild == null) {
+			return this;
+		} else {
+			return _oRightChild.findSmallest();
+		}
+	}
+	
+	this.findReplacement = function() {
+		if (_oLeftChild) {
+			return _oLeftChild.findLargest();
+		} else if (_oRightChild) {
+			return _oRightChild.findSmallest();
+		}
+		return null;
+	}
+	
+	this.copy = function(oNode) {
+		mKey  = oNode.getKey();
+		mData = oNode.getData();
+	}
+		
+	this.unset = function(mKey) {
+		if (_oParent != null) {
+			_oParent.unsetChild(this);
+		}
+		delete this;
+	}
+	
+	this.unsetChild = function(oChild) {
+		if (oChild == _oLeftChild) {
+			_oLeftChild = null;
+		} else if (oChild == _oRightChild) {
+			_oRightChild = null;
+		}
+	}
 	
 	this.insert = function(oChild) {
 		if (mKey > oChild.getKey()) {
 			if (_oLeftChild == null) {
+				oChild.setParent(this);
 				_oLeftChild = oChild;
 			} else {
 				_oLeftChild.insert(oChild);
 			}
 		} else {
 			if (_oRightChild == null) {
+				oChild.setParent(this);
 				_oRightChild = oChild;
 			} else {
 				_oRightChild.insert(oChild);
@@ -76,10 +121,11 @@ v.Btree.Node = function(mKey, mData) {
 		}
 	}
 	
-	this.setParent = function() {
-		
+	this.setParent = function(oParent) {
+		_oParent = oParent;
 	}
 	
+	this.getParent     = function() { return _oParent;     }
 	this.getRightChild = function() { return _oRightChild; }
 	this.getLeftChild  = function() { return _oLeftChild;  }
 	this.getData       = function() { return mData;        }
