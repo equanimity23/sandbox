@@ -11,11 +11,12 @@ v.Btree = function() {
 		}
 	}
 	
-	this.search = function(mKey) {
+	this.search = function(mKey, bGetNode) {
+		bGetNode = bGetNode || false;
 		if (_oRoot == null) {
 			return null;
 		}
-		return _oRoot.search(mKey);
+		return _oRoot.search(mKey, bGetNode);
 	}
 	
 	this.sort = function(bAsc) {
@@ -34,14 +35,29 @@ v.Btree = function() {
 		}
 	}
 	
-	this.set = function(mKey, mData) {}
+	this.set = function(mKey, mNewData) {
+		var oNode = this.search(mKey, true);
+		if (oNode != null) {
+			oNode.set(mNewData);
+			return true;
+		}
+		return false;
+	}
 	
-	this.unset = function(mKey) {}
+	this.unset = function(mKey) {
+		var oNode = this.search(mKey, true);
+		if (oNode != null) {
+			
+			return true;
+		}
+		return false;
+	}
 }
 
 v.Btree.Node = function(mKey, mData) {
 	
-	var _oLeftChild  = null,
+	var _oParent     = null,
+		_oLeftChild  = null,
 		_oRightChild = null;
 	
 	this.insert = function(oChild) {
@@ -58,6 +74,10 @@ v.Btree.Node = function(mKey, mData) {
 				_oRightChild.insert(oChild);
 			}
 		}
+	}
+	
+	this.setParent = function() {
+		
 	}
 	
 	this.getRightChild = function() { return _oRightChild; }
@@ -114,7 +134,7 @@ v.Btree.Node = function(mKey, mData) {
 		return a;
 	}
 	
-	this.search = function(mSearchKey) {
+	this.search = function(mSearchKey, bGetNode) {
 		var mSearchData = null;
 		if (mSearchKey < mKey) {
 			if (_oLeftChild != null) {
@@ -125,8 +145,16 @@ v.Btree.Node = function(mKey, mData) {
 				mSearchData = _oRightChild.search(mSearchKey);
 			}
 		} else {
-			mSearchData = mData;
+			if (bGetNode) {
+				mSearchData = this;
+			} else {
+				mSearchData = mData;
+			}
 		}
 		return mSearchData;
+	}
+	
+	this.set = function(mNewData) {
+		mData = mNewData;
 	}
 }
