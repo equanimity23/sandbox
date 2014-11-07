@@ -2,6 +2,14 @@ v.Btree = function() {
 	
 	var _oRoot = null;
 	
+	var _unlinkFromParent = function(oNode) {
+			if (oNode == oNode.getParent().getLeftChild()) {
+				oNode.getParent().setLeftChild(null);
+			} else if (oNode == oNode.getParent().getRightChild()) {
+				oNode.getParent().setRightChild(null);
+			}
+		};
+	
 	this.insert = function(mKey, mData) {
 		if (_oRoot == null) {
 			_oRoot = new v.Btree.Node(mKey, mData);
@@ -36,73 +44,75 @@ v.Btree = function() {
 	}
 	
 	this.unset = function(mKey) {
-		var oNode = this.search(mKey, true);
+		var oNode = this.search(mKey, true),
+			oReplacementNode;
+			
 		if (oNode != null) {
-			console.log(oNode, oNode.toString());
-			oReplacementNode = oNode.findReplacement();
-			if (oReplacementNode == null) {
-				oNode.unset();
-			} else {
+			if (oNode.getLeftChild()) {
+				oReplacementNode = oNode.getLeftChild().findLargest();
 				oNode.copy(oReplacementNode);
-				oReplacementNode.unset();
+				if (oReplacementNode.getLeftChild()) {
+					oNode.setLeftChild(oReplacementNode.getLeftChild());
+					oReplacementNode.getLeftChild().setParent(oNode);
+				} else {
+					_unlinkFromParent(oReplacementNode);
+				}
+				delete oReplacementNode;
+			} else if (oNode.getRightChild()) {
+				oReplacementNode = oNode.getRightChild().findSmallest();
+				oNode.copy(oReplacementNode);
+				console.log('oReplacementNode:', oReplacementNode.toString());
+				if (oReplacementNode.getRightChild()) {
+					oNode.setRightChild(oReplacementNode.getRightChild());
+					oReplacementNode.getRightChild().setParent(oNode);
+				} else {
+					_unlinkFromParent(oReplacementNode);
+				}
+				delete oReplacementNode;
+			} else {
+				if (oNode.getParent()) {
+					_unlinkFromParent(oNode);
+				} else {
+					_oRoot = null;
+				}
+				delete oNode;
 			}
+			this.display();
 			return true;
 		}
 		return false;
 	}
 }
 
+/***************************************************************************************/
+
 v.Btree.Node = function(mKey, mData) {
 	
 	var _oParent     = null,
 		_oLeftChild  = null,
 		_oRightChild = null;
-		
+
 	this.findLargest = function() {
-		if (_oLeftChild == null) {
+		if (_oRightChild == null) {
 			return this;
 		} else {
-			return _oLeftChild.findLargest();
+			return _oRightChild.findLargest();
 		}
 	}
 	
 	this.findSmallest = function() {
-		if (_oRightChild == null) {
+		if (_oLeftChild == null) {
 			return this;
 		} else {
-			return _oRightChild.findSmallest();
+			return _oLeftChild.findSmallest();
 		}
-	}
-	
-	this.findReplacement = function() {
-		if (_oLeftChild) {
-			return _oLeftChild.findLargest();
-		} else if (_oRightChild) {
-			return _oRightChild.findSmallest();
-		}
-		return null;
 	}
 	
 	this.copy = function(oNode) {
 		mKey  = oNode.getKey();
 		mData = oNode.getData();
 	}
-		
-	this.unset = function(mKey) {
-		if (_oParent != null) {
-			_oParent.unsetChild(this);
-		}
-		delete this;
-	}
-	
-	this.unsetChild = function(oChild) {
-		if (oChild == _oLeftChild) {
-			_oLeftChild = null;
-		} else if (oChild == _oRightChild) {
-			_oRightChild = null;
-		}
-	}
-	
+
 	this.insert = function(oChild) {
 		if (mKey > oChild.getKey()) {
 			if (_oLeftChild == null) {
@@ -121,17 +131,15 @@ v.Btree.Node = function(mKey, mData) {
 		}
 	}
 	
-	this.setParent = function(oParent) {
-		_oParent = oParent;
-	}
+	this.setParent     = function(oParent) { _oParent     = oParent; }
+	this.setRightChild = function(oChild)  { _oRightChild = oChild;  }
+	this.setLeftChild  = function(oChild)  { _oLeftChild  = oChild;  }
 	
 	this.getParent     = function() { return _oParent;     }
 	this.getRightChild = function() { return _oRightChild; }
 	this.getLeftChild  = function() { return _oLeftChild;  }
 	this.getData       = function() { return mData;        }
 	this.getKey        = function() { return mKey;         }
-	
-	//23[6[2[null,null],8[7,null] , [null, 56[null, 123[null, null]]]
 	
 	this.toString = function(nIndent) {
 		nIndent        = nIndent || 0;
@@ -184,11 +192,11 @@ v.Btree.Node = function(mKey, mData) {
 		var mSearchData = null;
 		if (mSearchKey < mKey) {
 			if (_oLeftChild != null) {
-				mSearchData = _oLeftChild.search(mSearchKey);
+				mSearchData = _oLeftChild.search(mSearchKey, bGetNode);
 			}
 		} else if (mSearchKey > mKey) {
 			if (_oRightChild != null) {
-				mSearchData = _oRightChild.search(mSearchKey);
+				mSearchData = _oRightChild.search(mSearchKey, bGetNode);
 			}
 		} else {
 			if (bGetNode) {
