@@ -1,6 +1,7 @@
 v.Canvas = function(oContainer, nW, nH) {
 	var _oCanvas,
-		_oContext;
+		_oContext,
+		_oThis = this;
 		
 	var _construct = function() {
 			console.log('construct');
@@ -27,7 +28,7 @@ v.Canvas = function(oContainer, nW, nH) {
 	
 	this.moveTo = function(nX, nY) {
 		_oContext.beginPath();
-		_oContext.moveTo(nY, nY);
+		_oContext.moveTo(nX, nY);
 	}
 
 	this.lineTo = function(nX, nY) {
@@ -36,14 +37,27 @@ v.Canvas = function(oContainer, nW, nH) {
 		_oContext.stroke();
 	}
 	
-	this.fill = function(nX, nY, aColor) {
-		this.setPixel(nX, nY, aColor);
+	this.fill = function(nX, nY, aColor, aBgColor) {
+		aBgColor = aBgColor || this.getPixel(nX, nY);
+		setTimeout(function() {
+			if (_oThis.hasColor(nX, nY, aBgColor)) {
+				_oThis.setPixel(nX, nY, aColor);
+				_oThis.fill(nX - 1, nY, aColor, aBgColor);
+				_oThis.fill(nX + 1, nY, aColor, aBgColor);
+				_oThis.fill(nX, nY - 1, aColor, aBgColor);
+				_oThis.fill(nX, nY + 1, aColor, aBgColor);
+			}
+		}, 200);
 	}
 	
 	this.hasColor = function(nX, nY, aColor) {
+		var aPixel = this.getPixel(nX, nY);
 		for (var n=0; n<aColor.length; n++) {
-			oPixel.data[n] = aColor[n];
+			if (aPixel[n] != aColor[n]) {
+				return false;
+			}
 		}
+		return true;
 	}
 
 	_construct();

@@ -8,7 +8,4 @@ var main = function() {
 	
 	oCanvas.fill(120, 180, [255, 0, 0, 255]);
 	
-	if (oCanvas.getPixel(nX, nY) != aColor) {
-		oCanvas.fill(?, ?, aColor)
-	}
 }

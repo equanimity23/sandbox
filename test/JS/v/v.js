@@ -6,7 +6,7 @@ v.each = function(o, f) {
 	var n = 0;
 	if (v.isArray(o)) {
 		for (n=0; n<o.length; n++) {
-			f(n, o[n]);
+			f(n, o[n], n);
 		}
 	} else {
 		for (var s in o) {
@@ -20,7 +20,7 @@ v.walk = function(o, f) {
 	var n = 0;
 	if (v.isArray(o)) {
 		for (n=0; n<o.length; n++) {
-			o[n] = f(n, o[n]);
+			o[n] = f(n, o[n], n);
 		}
 	} else {
 		for (var s in o) {
@@ -36,7 +36,7 @@ v.map = function(o, f) {
 	if (v.isArray(o)) {
 		m = [];
 		for (n=0; n<o.length; n++) {
-			m.push(f(n, o[n]));
+			m.push(f(n, o[n], n));
 		}
 	} else {
 		m = {};
@@ -51,11 +51,11 @@ v.map = function(o, f) {
 v.reduce = function(o, f) {
 	var n = 0,
 		m,
-		mResult;
+		mResult = null;
 	if (v.isArray(o)) {
 		for (n=0; n<o.length; n++) {
 			m = o[n];
-			mResult = f(n, m, mResult);
+			mResult = f(n, m, mResult, n);
 		}
 	} else {
 		for (var s in o) {

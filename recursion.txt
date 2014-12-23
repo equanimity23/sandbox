@@ -1,0 +1,23 @@
+
+if (oNode.leftChild) {              // check if Node has any child
+	if (!oNode.rightChild) {        // check if this child is only child
+		if(oNode.LeftChild.LeftChild) // check is Node's child has child
+	}
+}
+
+
+Recursion.
+
+0) Create visualization of the process in the real world terms.
+1) Recursive case condition - 
+	- 
+2) Terminal case condition - 
+	- if left and right neighbors don't exist;
+	- if left neighbor doesn't exist and mKey is less than right;
+	- if right doesn't exist and mKey is greater than left;
+	- if left and right exist and mKey is greater than left neighbor and less than right neighbor.
+3) What actions will we do when we go inside? - divide array by 2, select left or right, repeat
+4) What actions will we do when we go outside? - return
+5) Which data is sent inside? - mKey, index from, index to
+6) Which data is returned outside? - index
+7) What data exists through all recursion chain? - mKey, array
