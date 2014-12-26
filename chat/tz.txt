@@ -1,0 +1,12 @@
+- 2 functions (php): read and write from/into text file
+- page where content is updated (ajax request) from file without page refreshing
+- text box and Send button on the page
+
+1) write message, press 'Send' -> client sends POST request (?) -> write into file on server
+2) File is updated (event)/timer -> read file on server -> update chat page (ajax)
+
+
+
+2.0 features:
+1) add timestamp and user name to log message;
+2) add event driven chat refresh
