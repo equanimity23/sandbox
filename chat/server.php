@@ -1,17 +1,13 @@
 <?php
 
-	//$a = ['name'=>'Vlada', 'surname'=>'Pobedrya', 'sex'=>'sure!!!'];
+	function write($sFileName, $sMessage) {
+		$oChatLog  = fopen($sFileName, 'a');
+		fwrite($oChatLog, $sMessage . PHP_EOL);
+		fclose($oChatLog);
+	}
 	
-	//print json_encode($a, true);
+	function read($sFileName) {
+		return file_get_contents($sFileName);
+	}
 	
-
-	$oChatLog = fopen('chatLog.txt', 'a');
-	$sMessage = $_REQUEST . "\n";
-	
-	debug($_REQUEST);
-	
-	fwrite($oChatLog, $sMessage);
-	
-	fclose($oChatLog);
-
 ?>
