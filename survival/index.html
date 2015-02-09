@@ -1,0 +1,49 @@
+<html>
+	<head>
+		<title>Survival</title>
+		<script src="../../v/v.js"></script>
+		<script src="../../v/v.Canvas.js"></script>
+		<script src="../../v/v.Math.js"></script>
+		<script src="js/class.World.js"></script>
+		<script src="js/class.Entity.js"></script>
+		<script src="js/jquery.js"></script>
+		<style>
+			#container {
+				float: left;
+				margin-right: 20px;
+			}
+			#output {
+				white-space: pre-wrap;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container"></div>
+		<div id="output"></div>
+		<button id="btn_add_entity">Add Entity</button>
+		<button id="btn_start">Start</button>
+		<button id="btn_stop">Stop</button>
+		<button id="btn_next_iteration">Next Iteration</button>
+		<button id="btn_next_entity">Next Entity</button>
+		<script>
+			$(document).ready(function() {
+				var oWorld = new World($('#container')[0], 10, 10, 3, $('#output')[0]);
+				$('#btn_add_entity').click(function() {
+					oWorld.addEntity();
+				});
+				$('#btn_start').click(function() {
+					oWorld.start();
+				});
+				$('#btn_stop').click(function() {
+					oWorld.stop();
+				});
+				$('#btn_next_iteration').click(function() {
+					oWorld.nextIteration();
+				});
+				$('#btn_next_entity').click(function() {
+					oWorld.nextEntity();
+				});
+			});
+		</script>
+	</body>
+</html>

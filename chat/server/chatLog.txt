@@ -1,0 +1,8 @@
+user,message,time
+Vlada,bac,1422408578
+Vlada,msn.sdmfs;,1422408586
+Vlada,asdasdasd,1422408593
+,gggg,1422409251
+,sdasd,1422410439
+Vlada,sdasd,1422410471
+Vlada,bc,1422410782
