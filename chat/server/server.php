@@ -6,7 +6,8 @@
 	
 	switch ($sFunction) {
 		case 'read':
-			print Chat::read();
+			$nCount = $_REQUEST['n'];
+			print Chat::read($nCount);
 			break;
 			
 		case 'write':

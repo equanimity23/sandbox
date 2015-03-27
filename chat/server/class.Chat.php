@@ -3,7 +3,7 @@
 	require_once 'settings.php';
 
 	class Chat {
-
+		
 		public static function write($sMessage, $sUserName = 'anonymous') {
 			$sMessage = trim($sMessage);
 			if ($sMessage) {
@@ -19,12 +19,12 @@
 			}
 		}
 	
-		public static function read() {
+		public static function read($nCount) {
 			if (file_exists($_ENV['SETTINGS']['CHAT_LOG_FILE'])) {
-				
-				$aJson = [];
+				$aJson   = [];
 				$aLines  = file($_ENV['SETTINGS']['CHAT_LOG_FILE']);
 				$aHeader = explode(',', array_shift($aLines));
+				$aLines  = array_slice($aLines, $nCount);
 				
 				foreach ($aLines as $sLine) {
 					$aLine = explode(',', $sLine);
@@ -34,6 +34,7 @@
 					}
 					$aJson[] = '{' . implode(',', $aPairs) . '}';
 				}
+				
 				return '[' . implode(',', $aJson) . ']';
 			} else {
 				return '[]';

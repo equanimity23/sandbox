@@ -6,7 +6,7 @@ var Entity = function(oWorld, nX, nY) {
 		_nR        = 20,
 		_sColor    = '#000000',
 		_nEnergy   = 100,
-		_aVision   = new Array(8)
+		_aVision   = [],
 		_oDna;
 		
 	var _construct = function() {
@@ -28,10 +28,6 @@ var Entity = function(oWorld, nX, nY) {
 	}
 	
 	this.move = function() {
-		//check neighbours 
-		//if neigbour exists, check energy
-		//if energy is less, go to his cell
-		//else go to 
 		
 		var nXInc, nYInc, oOccupant;
 		
@@ -72,7 +68,13 @@ var Entity = function(oWorld, nX, nY) {
 	Before each move entity should check for "similar" situation in DNA, 
 	and if condition is found, move accordingly to DNA, otherwise – randomly.
 	
-	Entities will, then, fall into two categories: food or danger, but we should not
+	Entities will, then, fall into two categories: food or danger
+	
+	Situation  |  Reaction
+	
+	Energy     |  + or - (direction)
+	Distance   |  vector length
+	
 	*/
 	
 	this.see = function() {

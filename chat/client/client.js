@@ -1,3 +1,5 @@
+var nCount = 0;
+
 var getParameterByName = function(sName) {
 	sName = sName.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
 	var oRegex = new RegExp('[\\?&]' + sName + '=([^&#]*)'),
@@ -33,6 +35,7 @@ var formatTime = function(unixTimestamp, bAddDate) {
 
 var pollMessages = function() {
 	setTimeout(pollMessages, 3000);
+//	console.log('polling');
 	if (getParameterByName('user') !== '') {
 		getMessages(function(aData) {
 			showMessages(aData);
@@ -58,7 +61,6 @@ var sendMessage = function(sMessage, fCallback) {
 };
 
 var showMessages = function(aMessages) {
-	$('#messages').html('');
 	for (var n=0; n<aMessages.length; n++) {
 		var sDate = formatTime(aMessages[n].time, true);
 		$('#messages').append('<div>' + 
@@ -71,11 +73,13 @@ var showMessages = function(aMessages) {
 
 var getMessages = function(fCallback) {
 	$.ajax({
-		url      : 'http://localhost/sandbox/chat/server/server.php?f=read',
+		url      : 'http://localhost/sandbox/chat/server/server.php?f=read&n=' + nCount,
 		type     : 'GET',
 		dataType : 'json',
 		
 		success: function(aData) {
+			nCount += aData.length;
+			console.log(nCount);
 			if (fCallback) { fCallback(aData); }
 		},
 		error: function(oRequest, sError) {
