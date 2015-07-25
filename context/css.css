@@ -1,0 +1,7 @@
+html *:not(.hint_context_selected) {
+	color             : #666 !important;
+	background-color  : #CCC !important;
+}
+/*	html img:not(.hint_context_selected, .hint_context_selected *) {
+		opacity: 0.5;
+	}*/
