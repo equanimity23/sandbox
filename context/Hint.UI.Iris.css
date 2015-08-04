@@ -1,0 +1,7 @@
+.hint.hint_iris {
+	position         : absolute;
+	opacity          : 0.5;
+	background-color : #000;
+	z-index          : 999999998;
+	pointer-events   : none;
+}
